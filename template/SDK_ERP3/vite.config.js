@@ -1,18 +1,33 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import path from 'path'
+import fs from 'fs'
+
+// 确保目录存在
+const ensureDir = (dir) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true })
+  }
+}
+
+// 创建必要的目录
+ensureDir('./html')
+ensureDir('./css')
+ensureDir('./js')
 
 export default defineConfig({
   plugins: [vue()],
-  base: './',
+  base: '/',
   build: {
-    outDir: 'dist',
-    assetsDir: '',
-    cssCodeSplit: true,
+    outDir: '.',
+    emptyOutDir: false,
     rollupOptions: {
+      input: {
+        index: path.resolve(__dirname, 'html/index.html')
+      },
       output: {
         entryFileNames: 'js/[name].js',
-        chunkFileNames: 'js/[name]-[hash].js',
+        chunkFileNames: 'js/[name].js',
         assetFileNames: (assetInfo) => {
           const info = assetInfo.name.split('.')
           const ext = info[info.length - 1]
@@ -35,4 +50,4 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src')
     }
   }
-}) 
+})
