@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Layout as AntLayout, Menu, Button, Dropdown, Space } from 'antd';
+import { Layout as AntLayout, Menu, Button, Dropdown, Space, Input } from 'antd';
 import {
   HomeOutlined,
   CalendarOutlined,
@@ -12,9 +12,12 @@ import {
   CarOutlined,
   UserOutlined,
   DownOutlined,
+  SearchOutlined,
+  PlusOutlined,
 } from '@ant-design/icons';
 
 const { Header, Sider, Content } = AntLayout;
+const { Search } = Input;
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -100,8 +103,8 @@ const Layout = () => {
 
   return (
     <AntLayout className="min-h-screen">
-      <Sider width={280} theme="light" className="fixed h-screen">
-        <div className="p-6 border-b border-gray-200">
+      <Sider width={240} theme="light" className="fixed h-screen shadow-sm">
+        <div className="p-6">
           <div className="text-2xl font-bold text-primary">企业管理系统</div>
         </div>
         <Menu
@@ -109,35 +112,96 @@ const Layout = () => {
           selectedKeys={[location.pathname]}
           items={menuItems}
           onClick={handleMenuClick}
-          className="border-none"
+          className="border-none text-lg"
+          style={{
+            fontSize: '17px',
+          }}
         />
       </Sider>
-      <AntLayout className="ml-[280px]">
-        <Header className="bg-white px-6 flex items-center justify-end">
-          {isAuthenticated ? (
-            <Dropdown
-              menu={{
-                items: userMenuItems,
-                onClick: handleUserMenuClick,
-              }}
-              trigger={['click']}
+      <AntLayout className="ml-[240px]">
+        <Header className="bg-white px-8 py-4 flex items-center justify-between shadow-sm" style={{ height: '80px', lineHeight: 'normal' }}>
+          <div className="flex-1 max-w-xl my-2">
+            <Search
+              placeholder="搜索..."
+              allowClear
+              size="large"
+              className="header-search"
+              style={{ width: '100%' }}
+            />
+          </div>
+          <div className="flex items-center gap-4">
+            <Button 
+              type="primary" 
+              icon={<PlusOutlined />} 
+              size="large" 
+              className="flex items-center text-base h-[42px]"
             >
-              <Space className="cursor-pointer">
-                <UserOutlined />
-                <span>{user?.name}</span>
-                <DownOutlined />
-              </Space>
-            </Dropdown>
-          ) : (
-            <Button type="link" onClick={() => navigate('/login')}>
-              注册/登录
+              新建
             </Button>
-          )}
+            {isAuthenticated ? (
+              <Dropdown
+                menu={{
+                  items: userMenuItems,
+                  onClick: handleUserMenuClick,
+                }}
+                trigger={['click']}
+              >
+                <Space className="cursor-pointer text-base h-[42px]">
+                  <UserOutlined style={{ fontSize: '18px' }} />
+                  <span className="font-medium">{user?.name}</span>
+                  <DownOutlined />
+                </Space>
+              </Dropdown>
+            ) : (
+              <Button 
+                type="link" 
+                onClick={() => navigate('/login')} 
+                size="large" 
+                className="text-base h-[42px]"
+              >
+                注册/登录
+              </Button>
+            )}
+          </div>
         </Header>
-        <Content className="p-6">
+        <Content className="p-8 bg-[#f5f5f5]">
           <Outlet />
         </Content>
       </AntLayout>
+      <style jsx global>{`
+        .ant-menu-item {
+          height: 56px !important;
+          line-height: 56px !important;
+          font-weight: 600 !important;
+        }
+        .ant-menu-item .anticon {
+          font-size: 20px !important;
+          font-weight: bold !important;
+        }
+        .ant-menu-item-selected {
+          font-weight: 700 !important;
+        }
+        .ant-menu-item .ant-menu-item-icon {
+          stroke-width: 3 !important;
+          stroke: currentColor !important;
+        }
+        .header-search .ant-input-affix-wrapper {
+          height: 42px !important;
+          padding: 4px 16px !important;
+        }
+        .header-search .ant-input-search-button {
+          height: 42px !important;
+        }
+        .header-search .ant-input {
+          font-size: 16px !important;
+        }
+        .header-search .ant-input-prefix {
+          font-size: 18px !important;
+        }
+        .ant-layout-header {
+          padding: 16px 32px !important;
+        }
+      `}</style>
     </AntLayout>
   );
 };
