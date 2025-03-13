@@ -1,50 +1,91 @@
 const fs = require('fs');
 const path = require('path');
 
-// 定义目录路径
-const buildDir = path.join(__dirname, '../build');
-const targetHtmlDir = path.join(__dirname, '../html');
-const targetCssDir = path.join(__dirname, '../css');
-const targetJsDir = path.join(__dirname, '../js');
-
-// 创建目标目录
-[targetHtmlDir, targetCssDir, targetJsDir].forEach(dir => {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
+// 创建目录函数
+function createDirectoryIfNotExists(dirPath) {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true });
   }
-});
+}
 
 // 处理HTML文件
-const htmlContent = fs.readFileSync(path.join(buildDir, 'index.html'), 'utf8');
-const processedHtml = htmlContent
-  .replace(/\/static\/css\//g, '{pboot:sitetplpath}/css/')
-  .replace(/\/static\/js\//g, '{pboot:sitetplpath}/js/');
-fs.writeFileSync(path.join(targetHtmlDir, 'index.html'), processedHtml);
+function processHtmlFile(htmlContent) {
+  // 替换所有资源路径
+  let processedContent = htmlContent
+    // 替换JS和CSS文件的路径
+    .replace(/src="[^"]*\/static\/js\//g, 'src="{pboot:sitetplpath}/js/')
+    .replace(/href="[^"]*\/static\/css\//g, 'href="{pboot:sitetplpath}/css/')
+    // 替换其他图片资源的路径
+    .replace(/src="[^"]*\/static\/media\//g, 'src="{pboot:sitetplpath}/images/')
+    // 替换所有静态资源的路径
+    .replace(/href="[^"]*\/(favicon\.ico|logo192\.png|manifest\.json|logo\d*\.png)"/g, 'href="{pboot:sitetplpath}/images/$1"')
+    .replace(/src="[^"]*\/(favicon\.ico|logo192\.png|manifest\.json|logo\d*\.png)"/g, 'src="{pboot:sitetplpath}/images/$1"')
+    // 替换任何剩余的以/开头的资源路径
+    .replace(/href="\//g, 'href="{pboot:sitetplpath}/')
+    .replace(/src="\//g, 'src="{pboot:sitetplpath}/');
 
-// 复制CSS文件
-const cssDir = path.join(buildDir, 'static/css');
-if (fs.existsSync(cssDir)) {
-  fs.readdirSync(cssDir).forEach(file => {
-    if (file.endsWith('.css')) {
+  return processedContent;
+}
+
+// 主函数
+function main() {
+  const buildDir = path.resolve(__dirname, '../build');
+  const htmlDir = path.resolve(__dirname, '../html');
+  const cssDir = path.resolve(__dirname, '../css');
+  const jsDir = path.resolve(__dirname, '../js');
+  const imagesDir = path.resolve(__dirname, '../images');
+
+  // 创建目标目录
+  createDirectoryIfNotExists(htmlDir);
+  createDirectoryIfNotExists(cssDir);
+  createDirectoryIfNotExists(jsDir);
+  createDirectoryIfNotExists(imagesDir);
+
+  // 读取并处理index.html
+  const htmlContent = fs.readFileSync(path.join(buildDir, 'index.html'), 'utf8');
+  const processedHtml = processHtmlFile(htmlContent);
+  fs.writeFileSync(path.join(htmlDir, 'index.html'), processedHtml);
+
+  // 复制CSS文件
+  const cssFiles = fs.readdirSync(path.join(buildDir, 'static/css'));
+  cssFiles.forEach(file => {
+    fs.copyFileSync(
+      path.join(buildDir, 'static/css', file),
+      path.join(cssDir, file)
+    );
+  });
+
+  // 复制JS文件
+  const jsFiles = fs.readdirSync(path.join(buildDir, 'static/js'));
+  jsFiles.forEach(file => {
+    fs.copyFileSync(
+      path.join(buildDir, 'static/js', file),
+      path.join(jsDir, file)
+    );
+  });
+
+  // 复制静态资源到images目录
+  ['favicon.ico', 'logo192.png', 'manifest.json', 'logo512.png'].forEach(file => {
+    if (fs.existsSync(path.join(buildDir, file))) {
       fs.copyFileSync(
-        path.join(cssDir, file),
-        path.join(targetCssDir, file)
+        path.join(buildDir, file),
+        path.join(imagesDir, file)
       );
     }
   });
-}
 
-// 复制JS文件
-const jsDir = path.join(buildDir, 'static/js');
-if (fs.existsSync(jsDir)) {
-  fs.readdirSync(jsDir).forEach(file => {
-    if (file.endsWith('.js')) {
+  // 复制media文件夹中的图片到images目录
+  if (fs.existsSync(path.join(buildDir, 'static/media'))) {
+    const mediaFiles = fs.readdirSync(path.join(buildDir, 'static/media'));
+    mediaFiles.forEach(file => {
       fs.copyFileSync(
-        path.join(jsDir, file),
-        path.join(targetJsDir, file)
+        path.join(buildDir, 'static/media', file),
+        path.join(imagesDir, file)
       );
-    }
-  });
+    });
+  }
+
+  console.log('Build files have been distributed to their respective directories.');
 }
 
-console.log('构建后处理完成！'); 
+main(); 
