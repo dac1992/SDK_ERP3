@@ -2,4 +2,37 @@
 #    folder   #
 ###############
 /runtime
-/template/SDK_ERP3/node_modules
+/node_modules
+
+# Node.js dependencies
+template/SDK_ERP_REACT/node_modules/
+template/SDK_ERP_VUE/node_modules/
+
+# Build outputs
+template/SDK_ERP_REACT/build/
+template/SDK_ERP_VUE/dist/
+
+# IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cache directories
+.npm/
+.yarn/
+.pnp/
+.pnp.js
