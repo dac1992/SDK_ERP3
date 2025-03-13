@@ -1,7 +1,7 @@
 import React from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Layout as AntLayout, Menu } from 'antd';
+import { Layout as AntLayout, Menu, Button, Dropdown, Space } from 'antd';
 import {
   HomeOutlined,
   CalendarOutlined,
@@ -10,21 +10,16 @@ import {
   BookOutlined,
   ReadOutlined,
   CarOutlined,
+  UserOutlined,
+  DownOutlined,
 } from '@ant-design/icons';
 
-const { Sider, Content } = AntLayout;
+const { Header, Sider, Content } = AntLayout;
 
 const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { isAuthenticated } = useSelector((state) => state.auth);
-
-  // 如果未登录且不在登录页面，重定向到登录页
-  React.useEffect(() => {
-    if (!isAuthenticated && location.pathname !== '/login') {
-      navigate('/login');
-    }
-  }, [isAuthenticated, location.pathname, navigate]);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
 
   const menuItems = [
     {
@@ -64,13 +59,44 @@ const Layout = () => {
     },
   ];
 
+  const userMenuItems = [
+    {
+      key: 'profile',
+      label: '个人中心',
+    },
+    {
+      key: 'settings',
+      label: '设置',
+    },
+    {
+      type: 'divider',
+    },
+    {
+      key: 'logout',
+      label: '退出登录',
+    },
+  ];
+
   const handleMenuClick = ({ key }) => {
     navigate(key);
   };
 
-  if (!isAuthenticated && location.pathname === '/login') {
-    return <Outlet />;
-  }
+  const handleUserMenuClick = ({ key }) => {
+    switch (key) {
+      case 'profile':
+        navigate('/profile');
+        break;
+      case 'settings':
+        navigate('/settings');
+        break;
+      case 'logout':
+        // 这里应该调用登出action
+        navigate('/');
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <AntLayout className="min-h-screen">
@@ -87,6 +113,27 @@ const Layout = () => {
         />
       </Sider>
       <AntLayout className="ml-[280px]">
+        <Header className="bg-white px-6 flex items-center justify-end">
+          {isAuthenticated ? (
+            <Dropdown
+              menu={{
+                items: userMenuItems,
+                onClick: handleUserMenuClick,
+              }}
+              trigger={['click']}
+            >
+              <Space className="cursor-pointer">
+                <UserOutlined />
+                <span>{user?.name}</span>
+                <DownOutlined />
+              </Space>
+            </Dropdown>
+          ) : (
+            <Button type="link" onClick={() => navigate('/login')}>
+              注册/登录
+            </Button>
+          )}
+        </Header>
         <Content className="p-6">
           <Outlet />
         </Content>

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Card, Button, Modal, message } from 'antd';
 import { ClockCircleOutlined, EnvironmentOutlined, UserOutlined, BankOutlined, LaptopOutlined } from '@ant-design/icons';
 import moment from 'moment';
@@ -15,7 +16,8 @@ import {
 
 const Attendance = () => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   const { todayRecords, loading } = useSelector((state) => state.attendance);
   const [modalVisible, setModalVisible] = useState(false);
   const [attendanceInfo, setAttendanceInfo] = useState(null);
@@ -27,8 +29,9 @@ const Attendance = () => {
 
   const handleCheckIn = async () => {
     try {
-      if (!user) {
-        message.error('请先登录');
+      if (!isAuthenticated) {
+        message.info('请先登录');
+        navigate('/login', { state: { from: '/attendance' } });
         return;
       }
 
@@ -79,8 +82,9 @@ const Attendance = () => {
 
   const handleCheckOut = async () => {
     try {
-      if (!user) {
-        message.error('请先登录');
+      if (!isAuthenticated) {
+        message.info('请先登录');
+        navigate('/login', { state: { from: '/attendance' } });
         return;
       }
 
