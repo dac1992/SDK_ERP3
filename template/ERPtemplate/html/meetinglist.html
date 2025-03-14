@@ -51,39 +51,6 @@ body {
   background-color: #F3F4F6;
 }
 
-.sidebar {
-  width: 280px;
-  background-color: white;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-}
-
-.main-content {
-  margin-left: 280px;
-  padding: 24px;
-  width: calc(100% - 280px);
-}
-
-.nav-item {
-  padding: 12px 24px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.nav-item:hover {
-  background-color: #F3F4F6;
-}
-
-.nav-item.active {
-  background-color: #EBF5FF;
-  color: #3B82F6;
-}
-
 .search-input {
   border: 1px solid #E5E7EB;
   border-radius: 4px;
@@ -164,6 +131,17 @@ body {
   overflow-x: auto;
   margin-bottom: 20px;
 }
+
+.meeting-link {
+  color: #3B82F6;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+
+.meeting-link:hover {
+  color: #2563EB;
+  text-decoration: underline;
+}
 </style>
 </head>
 <body>
@@ -172,7 +150,7 @@ body {
   {include file='common/left.html'}
 
   <div class="main-content">
-    {include file='common/head.html'}
+    {include file='common/top.html'}
 
     <div class="card mb-6">
       <div class="flex justify-between items-center mb-6">
@@ -231,13 +209,37 @@ body {
             <tr>
               <td>
                 <script>
-                  const startTime = '[list:ext_time] [list:ext_StartTime]';
-                  const endTime = '[list:ext_time] [list:ext_EndTime]';
-                  const status = getMeetingStatus(startTime, endTime);
-                  document.write(`<span class="status-badge ${status.class}">${status.text}</span>`);
+                  try {
+                    const startTime = new Date('[list:ext_StartTime]');
+                    const endTime = new Date('[list:ext_EndTime]');
+                    const now = new Date();
+                    
+                    let statusClass = '';
+                    let statusText = '';
+                    
+                    if (now < startTime) {
+                      statusClass = 'upcoming';
+                      statusText = '待开始';
+                    } else if (now >= startTime && now <= endTime) {
+                      statusClass = 'ongoing';
+                      statusText = '进行中';
+                    } else {
+                      statusClass = 'completed';
+                      statusText = '已结束';
+                    }
+                    
+                    document.write(`<span class="status-badge ${statusClass}">${statusText}</span>`);
+                  } catch (error) {
+                    console.error('时间处理错误:', error);
+                    document.write('<span class="status-badge">时间格式错误</span>');
+                  }
                 </script>
               </td>
-              <td>[list:title]</td>
+              <td>
+                <a href="[list:link]" class="meeting-link" title="查看详情">
+                  [list:title]
+                </a>
+              </td>
               <td>[list:ext_time style=Y-m-d]</td>
               <td>[list:ext_materiel]</td>
               <td>[list:ext_FieldControl]</td>

@@ -32,126 +32,99 @@ tailwind.config = {
 </script>
 <style>
 body {
-  min-height: 1024px;
+  min-height: 100vh;
   background-color: #F3F4F6;
-}
-
-.sidebar {
-  width: 280px;
-  background-color: white;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-}
-
-.main-content {
-  margin-left: 280px;
-  padding: 24px;
-  width: calc(100% - 280px);
-}
-
-.nav-item {
-  padding: 12px 24px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.nav-item:hover {
-  background-color: #F3F4F6;
-}
-
-.nav-item.active {
-  background-color: #EBF5FF;
-  color: #3B82F6;
-}
-
-.search-input {
-  border: 1px solid #E5E7EB;
-  border-radius: 4px;
-  padding: 8px 16px;
-  width: 400px;
-  display: flex;
-  align-items: center;
-}
-
-.search-input input {
-  border: none;
-  outline: none;
-  flex: 1;
-  margin-left: 8px;
 }
 
 .card {
   background: white;
   border-radius: 8px;
-  padding: 20px;
+  padding: 24px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
-.icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 24px;
-  height: 24px;
+.detail-section {
+  margin-bottom: 24px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.section-header {
+  background: #F9FAFB;
+  padding: 12px 16px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.section-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.section-content {
+  padding: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
 }
 
 .detail-item {
-  margin-bottom: 20px;
+  display: flex;
+  align-items: baseline;
 }
 
 .detail-label {
+  width: 100px;
+  flex-shrink: 0;
   color: #6B7280;
   font-size: 14px;
-  margin-bottom: 4px;
 }
 
 .detail-value {
-  color: #111827;
-  font-size: 16px;
-}
-
-.attendee-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.attendee-item {
-  display: flex;
-  align-items: center;
-  padding: 12px;
-  background-color: #F9FAFB;
-  border-radius: 8px;
-}
-
-.attendee-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #E5E7EB;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 12px;
-}
-
-.attendee-info {
   flex: 1;
-}
-
-.attendee-name {
-  font-weight: 500;
   color: #111827;
+  font-size: 14px;
 }
 
-.attendee-role {
-  font-size: 14px;
-  color: #6B7280;
+.content-section {
+  margin-top: 24px;
+}
+
+.content-section .section-content {
+  display: block;
+  padding: 20px;
+  line-height: 1.6;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border: 1px solid #E5E7EB;
+  border-radius: 6px;
+  color: #374151;
+  transition: all 0.3s;
+}
+
+.back-button:hover {
+  background: #F3F4F6;
+  border-color: #D1D5DB;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.page-title {
+  margin-left: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
 }
 </style>
 </head>
@@ -161,116 +134,128 @@ body {
   {include file='common/left.html'}
 
   <div class="main-content">
-    {include file='common/head.html'}
+    {include file='common/top.html'}
 
-    <div class="card mb-6">
-      <div class="flex items-center mb-6">
-        <a href="{pboot:sort scode=12}[sort:link]{/pboot:sort}" class="text-primary hover:text-blue-700 mr-4">
-          <i class="fa-solid fa-arrow-left"></i>
-          <span class="ml-1">返回</span>
+    <div class="card">
+      <div class="page-header">
+        <a href="{pboot:sort scode=12}[sort:link]{/pboot:sort}" class="back-button">
+          <i class="fa-solid fa-arrow-left mr-2"></i>
+          返回列表
         </a>
-        <h2 class="text-lg font-bold">会议详情</h2>
+        <h1 class="page-title">{content:title}</h1>
       </div>
 
-      <div class="grid grid-cols-2 gap-6">
-        <div>
-          <div class="detail-item">
-            <div class="detail-label">会议名称</div>
-            <div class="detail-value">产品规划评审会议</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">会议时间</div>
-            <div class="detail-value">2024-03-20 10:00 - 11:30</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">会议室</div>
-            <div class="detail-value">3号会议室</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">主持人</div>
-            <div class="detail-value">张总监</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">参会人数</div>
-            <div class="detail-value">8人</div>
-          </div>
-          <div class="detail-item">
-            <div class="detail-label">会议状态</div>
-            <div class="detail-value">
-              <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-sm">即将开始</span>
-            </div>
-          </div>
+      <div class="detail-section">
+        <div class="section-header">
+          <h3 class="section-title">基本信息</h3>
         </div>
-
-        <div>
+        <div class="section-content">
           <div class="detail-item">
-            <div class="detail-label">会议议程</div>
-            <div class="detail-value">
-              <ol class="list-decimal list-inside space-y-2">
-                <li>产品功能需求评审</li>
-                <li>技术方案讨论</li>
-                <li>项目进度汇报</li>
-                <li>下一步工作安排</li>
-              </ol>
-            </div>
+            <div class="detail-label">日期：</div>
+            <div class="detail-value">{content:ext_time}</div>
           </div>
           <div class="detail-item">
-            <div class="detail-label">会议材料</div>
-            <div class="detail-value">
-              <div class="space-y-2">
-                <div class="flex items-center text-primary">
-                  <i class="fa-solid fa-file-pdf mr-2"></i>
-                  <span>产品需求文档.pdf</span>
-                </div>
-                <div class="flex items-center text-primary">
-                  <i class="fa-solid fa-file-word mr-2"></i>
-                  <span>技术方案.docx</span>
-                </div>
-              </div>
-            </div>
+            <div class="detail-label">会议地点：</div>
+            <div class="detail-value">{content:ext_MeetingPlace}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">会议形式：</div>
+            <div class="detail-value">{content:ext_ConferenceFormat}</div>
           </div>
         </div>
       </div>
 
-      <div class="mt-8">
-        <div class="detail-label mb-4">参会人员</div>
-        <div class="attendee-list">
-          <div class="attendee-item">
-            <div class="attendee-avatar">
-              <i class="fa-solid fa-user text-gray-500"></i>
-            </div>
-            <div class="attendee-info">
-              <div class="attendee-name">张总监</div>
-              <div class="attendee-role">产品部</div>
-            </div>
+      <div class="detail-section">
+        <div class="section-header">
+          <h3 class="section-title">时间安排</h3>
+        </div>
+        <div class="section-content">
+          <div class="detail-item">
+            <div class="detail-label">报到时间：</div>
+            <div class="detail-value">{content:ext_CheckInTime}</div>
           </div>
-          <div class="attendee-item">
-            <div class="attendee-avatar">
-              <i class="fa-solid fa-user text-gray-500"></i>
-            </div>
-            <div class="attendee-info">
-              <div class="attendee-name">李经理</div>
-              <div class="attendee-role">技术部</div>
-            </div>
+          <div class="detail-item">
+            <div class="detail-label">开幕时间：</div>
+            <div class="detail-value">{content:ext_OpeningCeremonTime}</div>
           </div>
-          <div class="attendee-item">
-            <div class="attendee-avatar">
-              <i class="fa-solid fa-user text-gray-500"></i>
-            </div>
-            <div class="attendee-info">
-              <div class="attendee-name">王工程师</div>
-              <div class="attendee-role">开发组</div>
-            </div>
+          <div class="detail-item">
+            <div class="detail-label">开始时间：</div>
+            <div class="detail-value">{content:ext_StartTime}</div>
           </div>
-          <div class="attendee-item">
-            <div class="attendee-avatar">
-              <i class="fa-solid fa-user text-gray-500"></i>
-            </div>
-            <div class="attendee-info">
-              <div class="attendee-name">刘设计师</div>
-              <div class="attendee-role">设计组</div>
-            </div>
+          <div class="detail-item">
+            <div class="detail-label">结束时间：</div>
+            <div class="detail-value">{content:ext_EndTime}</div>
           </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="section-header">
+          <h3 class="section-title">组织信息</h3>
+        </div>
+        <div class="section-content">
+          <div class="detail-item">
+            <div class="detail-label">主办方：</div>
+            <div class="detail-value">{content:ext_sponsor}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">专业委员会：</div>
+            <div class="detail-value">{content:ext_ProfessionalCommitt}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">医院：</div>
+            <div class="detail-value">{content:ext_nosocomium}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">科室：</div>
+            <div class="detail-value">{content:ext_Administrativeoffice}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">推荐人/业务：</div>
+            <div class="detail-value">{content:ext_Referees}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="section-header">
+          <h3 class="section-title">会议支持</h3>
+        </div>
+        <div class="section-content">
+          <div class="detail-item">
+            <div class="detail-label">物料：</div>
+            <div class="detail-value">{content:ext_materiel}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">控场：</div>
+            <div class="detail-value">{content:ext_FieldControl}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">公众号：</div>
+            <div class="detail-value">{content:ext_PublicAccount}</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">资料整理：</div>
+            <div class="detail-value">{content:ext_DataSorting}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="section-header">
+          <h3 class="section-title">备注信息</h3>
+        </div>
+        <div class="section-content">
+          <div class="detail-value">{content:ext_remark}</div>
+        </div>
+      </div>
+
+      <div class="detail-section">
+        <div class="section-header">
+          <h3 class="section-title">会议内容</h3>
+        </div>
+        <div class="section-content">
+          <div class="detail-value">{content:content}</div>
         </div>
       </div>
     </div>

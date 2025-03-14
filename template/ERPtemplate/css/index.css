@@ -1,0 +1,70 @@
+body {
+  min-height: 1024px;
+  background-color: #F3F4F6;
+}
+
+.main-content {
+  margin-left: 240px;
+  padding: 24px;
+  width: calc(100% - 240px);
+}
+
+.nav-item {
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nav-item:hover {
+  background-color: #F3F4F6;
+}
+
+.nav-item.active {
+  background-color: #EBF5FF;
+  color: #3B82F6;
+}
+
+.search-input {
+  border: 1px solid #E5E7EB;
+  border-radius: 4px;
+  padding: 8px 16px;
+  width: 400px;
+  display: flex;
+  align-items: center;
+}
+
+.search-input input {
+  border: none;
+  outline: none;
+  flex: 1;
+  margin-left: 8px;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.progress-bar {
+  height: 8px;
+  border-radius: 4px;
+  background: #E5E7EB;
+}
+
+.progress-value {
+  height: 100%;
+  border-radius: 4px;
+  background: #3B82F6;
+  width: 85%;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+} 

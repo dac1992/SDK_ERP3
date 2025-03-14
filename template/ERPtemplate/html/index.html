@@ -7,6 +7,8 @@
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
 <script src="https://cdn.tailwindcss.com"></script>
+<link href="{pboot:sitetplpath}/css/index.css" rel="stylesheet">
+<link href="{pboot:sitetplpath}/css/left.css" rel="stylesheet">
 <script>
 tailwind.config = {
   theme: {
@@ -31,88 +33,6 @@ tailwind.config = {
   }
 }
 </script>
-<style>
-body {
-  min-height: 1024px;
-  background-color: #F3F4F6;
-}
-
-.sidebar {
-  width: 280px;
-  background-color: white;
-  height: 100vh;
-  position: fixed;
-  left: 0;
-  top: 0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-}
-
-.main-content {
-  margin-left: 280px;
-  padding: 24px;
-  width: calc(100% - 280px);
-}
-
-.nav-item {
-  padding: 12px 24px;
-  display: flex;
-  align-items: center;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-
-.nav-item:hover {
-  background-color: #F3F4F6;
-}
-
-.nav-item.active {
-  background-color: #EBF5FF;
-  color: #3B82F6;
-}
-
-.search-input {
-  border: 1px solid #E5E7EB;
-  border-radius: 4px;
-  padding: 8px 16px;
-  width: 400px;
-  display: flex;
-  align-items: center;
-}
-
-.search-input input {
-  border: none;
-  outline: none;
-  flex: 1;
-  margin-left: 8px;
-}
-
-.card {
-  background: white;
-  border-radius: 8px;
-  padding: 20px;
-}
-
-.progress-bar {
-  height: 8px;
-  border-radius: 4px;
-  background: #E5E7EB;
-}
-
-.progress-value {
-  height: 100%;
-  border-radius: 4px;
-  background: #3B82F6;
-  width: 85%;
-}
-
-.icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 24px;
-  height: 24px;
-}
-</style>
 </head>
 <body>
 
@@ -120,7 +40,7 @@ body {
   {include file='common/left.html'}
 
   <div class="main-content">
-    {include file='common/head.html'}
+    {include file='common/top.html'}
 
     <div class="grid grid-cols-4 gap-6 mb-6">
       <div class="card">
