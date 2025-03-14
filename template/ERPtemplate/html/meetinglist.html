@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会议管理 - 企业管理系统</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#3B82F6',
+        secondary: '#10B981'
+      },
+      borderRadius: {
+        'none': '0px',
+        'sm': '2px',
+        DEFAULT: '4px',
+        'md': '8px',
+        'lg': '12px',
+        'xl': '16px',
+        '2xl': '20px',
+        '3xl': '24px',
+        'full': '9999px',
+        'button': '4px'
+      }
+    }
+  }
+}
+</script>
+<style>
+body {
+  min-height: 1024px;
+  background-color: #F3F4F6;
+}
+
+.sidebar {
+  width: 280px;
+  background-color: white;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.main-content {
+  margin-left: 280px;
+  padding: 24px;
+  width: calc(100% - 280px);
+}
+
+.nav-item {
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nav-item:hover {
+  background-color: #F3F4F6;
+}
+
+.nav-item.active {
+  background-color: #EBF5FF;
+  color: #3B82F6;
+}
+
+.search-input {
+  border: 1px solid #E5E7EB;
+  border-radius: 4px;
+  padding: 8px 16px;
+  width: 400px;
+  display: flex;
+  align-items: center;
+}
+
+.search-input input {
+  border: none;
+  outline: none;
+  flex: 1;
+  margin-left: 8px;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.meeting-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.meeting-table th,
+.meeting-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.meeting-table th {
+  background-color: #F9FAFB;
+  font-weight: 500;
+  color: #374151;
+}
+
+.meeting-table tr:hover {
+  background-color: #F9FAFB;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.status-badge.upcoming {
+  background-color: #EBF5FF;
+  color: #3B82F6;
+}
+
+.status-badge.ongoing {
+  background-color: #ECFDF5;
+  color: #10B981;
+}
+
+.status-badge.completed {
+  background-color: #F3F4F6;
+  color: #6B7280;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+}
+</style>
+</head>
+<body>
+
+<div class="flex">
+  {include file='common/left.html'}
+
+  <div class="main-content">
+    {include file='common/head.html'}
+
+    <div class="card mb-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-lg font-bold">会议列表</h2>
+        <button class="bg-primary text-white px-4 py-2 rounded-button flex items-center">
+          <i class="fa-solid fa-plus mr-2"></i>
+          新建会议
+        </button>
+      </div>
+
+      <div class="flex gap-4 mb-6">
+        <div class="flex items-center">
+          <span class="text-gray-500 mr-2">状态：</span>
+          <select class="border border-gray-300 rounded px-3 py-2">
+            <option value="">全部</option>
+            <option value="upcoming">即将开始</option>
+            <option value="ongoing">进行中</option>
+            <option value="completed">已结束</option>
+          </select>
+        </div>
+        <div class="flex items-center">
+          <span class="text-gray-500 mr-2">日期：</span>
+          <input type="date" class="border border-gray-300 rounded px-3 py-2">
+        </div>
+        <div class="flex items-center">
+          <span class="text-gray-500 mr-2">会议室：</span>
+          <select class="border border-gray-300 rounded px-3 py-2">
+            <option value="">全部</option>
+            <option value="1">1号会议室</option>
+            <option value="2">2号会议室</option>
+            <option value="3">3号会议室</option>
+          </select>
+        </div>
+      </div>
+
+      <table class="meeting-table">
+        <thead>
+          <tr>
+            <th>会议名称</th>
+            <th>日期</th>
+            <th>时间</th>
+            <th>会议室</th>
+            <th>主持人</th>
+            <th>参会人数</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {pboot:list num=10 order=date}
+          <tr>
+            <td><a href="[list:link]" class="text-primary hover:text-blue-700">[list:ext_ConferenceName]</a></td>
+            <td>[list:ext_time style=Y-m-d]</td>
+            <td>[list:ext_StartTime] - [list:ext_EndTime]</td>
+            <td>[list:ext_MeetingPlace]</td>
+            <td>[list:ext_sponsor]</td>
+            <td>[list:ext_ProfessionalCommitt]</td>
+            <td>
+              <span class="status-badge {pboot:if('[list:ext_ConferenceFormat]'=='1')}upcoming{/pboot:if}
+                                      {pboot:if('[list:ext_ConferenceFormat]'=='2')}ongoing{/pboot:if}
+                                      {pboot:if('[list:ext_ConferenceFormat]'=='3')}completed{/pboot:if}">
+                {pboot:if('[list:ext_ConferenceFormat]'=='1')}即将开始{/pboot:if}
+                {pboot:if('[list:ext_ConferenceFormat]'=='2')}进行中{/pboot:if}
+                {pboot:if('[list:ext_ConferenceFormat]'=='3')}已结束{/pboot:if}
+              </span>
+            </td>
+            <td>
+              <div class="flex gap-2">
+                <a href="[list:link]" class="text-primary hover:text-blue-700">
+                  <i class="fa-solid fa-edit"></i>
+                </a>
+                <button class="text-red-500 hover:text-red-700">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {/pboot:list}
+        </tbody>
+      </table>
+
+      <div class="flex justify-between items-center mt-6">
+        <div class="text-gray-500">
+          共 {page:rows} 条记录，第 {page:current}/{page:count} 页
+        </div>
+        <div class="flex gap-2">
+          <a href="{page:index}" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">
+            <i class="fa-solid fa-angles-left mr-1"></i>
+            首页
+          </a>
+          <a href="{page:pre}" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">
+            <i class="fa-solid fa-angle-left mr-1"></i>
+            上一页
+          </a>
+          <div class="flex gap-1">
+            {page:numbar}
+          </div>
+          <a href="{page:next}" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">
+            下一页
+            <i class="fa-solid fa-angle-right ml-1"></i>
+          </a>
+          <a href="{page:last}" class="px-3 py-1 border border-gray-300 rounded hover:bg-gray-50">
+            尾页
+            <i class="fa-solid fa-angles-right ml-1"></i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html> 

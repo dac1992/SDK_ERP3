@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>会议详情 - 企业管理系统</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        primary: '#3B82F6',
+        secondary: '#10B981'
+      },
+      borderRadius: {
+        'none': '0px',
+        'sm': '2px',
+        DEFAULT: '4px',
+        'md': '8px',
+        'lg': '12px',
+        'xl': '16px',
+        '2xl': '20px',
+        '3xl': '24px',
+        'full': '9999px',
+        'button': '4px'
+      }
+    }
+  }
+}
+</script>
+<style>
+body {
+  min-height: 1024px;
+  background-color: #F3F4F6;
+}
+
+.sidebar {
+  width: 280px;
+  background-color: white;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.main-content {
+  margin-left: 280px;
+  padding: 24px;
+  width: calc(100% - 280px);
+}
+
+.nav-item {
+  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.nav-item:hover {
+  background-color: #F3F4F6;
+}
+
+.nav-item.active {
+  background-color: #EBF5FF;
+  color: #3B82F6;
+}
+
+.search-input {
+  border: 1px solid #E5E7EB;
+  border-radius: 4px;
+  padding: 8px 16px;
+  width: 400px;
+  display: flex;
+  align-items: center;
+}
+
+.search-input input {
+  border: none;
+  outline: none;
+  flex: 1;
+  margin-left: 8px;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 24px;
+}
+
+.detail-item {
+  margin-bottom: 20px;
+}
+
+.detail-label {
+  color: #6B7280;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+
+.detail-value {
+  color: #111827;
+  font-size: 16px;
+}
+
+.attendee-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.attendee-item {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  background-color: #F9FAFB;
+  border-radius: 8px;
+}
+
+.attendee-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #E5E7EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 12px;
+}
+
+.attendee-info {
+  flex: 1;
+}
+
+.attendee-name {
+  font-weight: 500;
+  color: #111827;
+}
+
+.attendee-role {
+  font-size: 14px;
+  color: #6B7280;
+}
+</style>
+</head>
+<body>
+
+<div class="flex">
+  {include file='common/left.html'}
+
+  <div class="main-content">
+    {include file='common/head.html'}
+
+    <div class="card mb-6">
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-lg font-bold">会议详情</h2>
+        <div class="flex gap-2">
+          <button class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50">
+            <i class="fa-solid fa-edit mr-2"></i>
+            编辑
+          </button>
+          <button class="px-4 py-2 bg-primary text-white rounded">
+            <i class="fa-solid fa-check mr-2"></i>
+            确认参会
+          </button>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-6">
+        <div>
+          <div class="detail-item">
+            <div class="detail-label">会议名称</div>
+            <div class="detail-value">产品规划评审会议</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">会议时间</div>
+            <div class="detail-value">2024-03-20 10:00 - 11:30</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">会议室</div>
+            <div class="detail-value">3号会议室</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">主持人</div>
+            <div class="detail-value">张总监</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">参会人数</div>
+            <div class="detail-value">8人</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">会议状态</div>
+            <div class="detail-value">
+              <span class="px-2 py-1 bg-blue-100 text-blue-700 rounded text-sm">即将开始</span>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="detail-item">
+            <div class="detail-label">会议议程</div>
+            <div class="detail-value">
+              <ol class="list-decimal list-inside space-y-2">
+                <li>产品功能需求评审</li>
+                <li>技术方案讨论</li>
+                <li>项目进度汇报</li>
+                <li>下一步工作安排</li>
+              </ol>
+            </div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label">会议材料</div>
+            <div class="detail-value">
+              <div class="space-y-2">
+                <div class="flex items-center text-primary">
+                  <i class="fa-solid fa-file-pdf mr-2"></i>
+                  <span>产品需求文档.pdf</span>
+                </div>
+                <div class="flex items-center text-primary">
+                  <i class="fa-solid fa-file-word mr-2"></i>
+                  <span>技术方案.docx</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-8">
+        <div class="detail-label mb-4">参会人员</div>
+        <div class="attendee-list">
+          <div class="attendee-item">
+            <div class="attendee-avatar">
+              <i class="fa-solid fa-user text-gray-500"></i>
+            </div>
+            <div class="attendee-info">
+              <div class="attendee-name">张总监</div>
+              <div class="attendee-role">产品部</div>
+            </div>
+          </div>
+          <div class="attendee-item">
+            <div class="attendee-avatar">
+              <i class="fa-solid fa-user text-gray-500"></i>
+            </div>
+            <div class="attendee-info">
+              <div class="attendee-name">李经理</div>
+              <div class="attendee-role">技术部</div>
+            </div>
+          </div>
+          <div class="attendee-item">
+            <div class="attendee-avatar">
+              <i class="fa-solid fa-user text-gray-500"></i>
+            </div>
+            <div class="attendee-info">
+              <div class="attendee-name">王工程师</div>
+              <div class="attendee-role">开发组</div>
+            </div>
+          </div>
+          <div class="attendee-item">
+            <div class="attendee-avatar">
+              <i class="fa-solid fa-user text-gray-500"></i>
+            </div>
+            <div class="attendee-info">
+              <div class="attendee-name">刘设计师</div>
+              <div class="attendee-role">设计组</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html> 

@@ -1,0 +1,21 @@
+<div class="sidebar">
+  <div class="p-6 border-b border-gray-200">
+    <div class="text-2xl font-bold text-primary">企业管理系统</div>
+  </div>
+  <div class="py-4">
+    {pboot:nav num=10 parent=0}
+    <a href="[nav:link]" class="block">
+      <div class="nav-item {pboot:if('[nav:scode]'=='{sort:tcode}')}active{/pboot:if}">
+        <i class="fa-solid {pboot:if('[nav:scode]'=='13')}fa-house{/pboot:if}
+                         {pboot:if('[nav:scode]'=='12')}fa-calendar{/pboot:if}
+                         {pboot:if('[nav:scode]'=='14')}fa-clock{/pboot:if}
+                         {pboot:if('[nav:scode]'=='15')}fa-wrench{/pboot:if}
+                         {pboot:if('[nav:scode]'=='16')}fa-book{/pboot:if}
+                         {pboot:if('[nav:scode]'=='17')}fa-graduation-cap{/pboot:if}
+                         {pboot:if('[nav:scode]'=='18')}fa-car{/pboot:if} icon mr-3"></i>
+        <span>[nav:name]</span>
+      </div>
+    </a>
+    {/pboot:nav}
+  </div>
+</div> 
