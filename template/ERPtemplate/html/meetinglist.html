@@ -29,6 +29,21 @@ tailwind.config = {
     }
   }
 }
+
+// 添加状态判断函数
+function getMeetingStatus(startTime, endTime) {
+  const now = new Date();
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  
+  if (now < start) {
+    return { class: 'upcoming', text: '待开始' };
+  } else if (now >= start && now <= end) {
+    return { class: 'ongoing', text: '进行中' };
+  } else {
+    return { class: 'completed', text: '已结束' };
+  }
+}
 </script>
 <style>
 body {
@@ -101,6 +116,7 @@ body {
   padding: 12px 16px;
   text-align: left;
   border-bottom: 1px solid #E5E7EB;
+  white-space: nowrap;
 }
 
 .meeting-table th {
@@ -142,6 +158,12 @@ body {
   width: 24px;
   height: 24px;
 }
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
 </style>
 </head>
 <body>
@@ -155,10 +177,6 @@ body {
     <div class="card mb-6">
       <div class="flex justify-between items-center mb-6">
         <h2 class="text-lg font-bold">会议列表</h2>
-        <button class="bg-primary text-white px-4 py-2 rounded-button flex items-center">
-          <i class="fa-solid fa-plus mr-2"></i>
-          新建会议
-        </button>
       </div>
 
       <div class="flex gap-4 mb-6">
@@ -186,51 +204,64 @@ body {
         </div>
       </div>
 
-      <table class="meeting-table">
-        <thead>
-          <tr>
-            <th>会议名称</th>
-            <th>日期</th>
-            <th>时间</th>
-            <th>会议室</th>
-            <th>主持人</th>
-            <th>参会人数</th>
-            <th>状态</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          {pboot:list num=10 order=date}
-          <tr>
-            <td><a href="[list:link]" class="text-primary hover:text-blue-700">[list:ext_ConferenceName]</a></td>
-            <td>[list:ext_time style=Y-m-d]</td>
-            <td>[list:ext_StartTime] - [list:ext_EndTime]</td>
-            <td>[list:ext_MeetingPlace]</td>
-            <td>[list:ext_sponsor]</td>
-            <td>[list:ext_ProfessionalCommitt]</td>
-            <td>
-              <span class="status-badge {pboot:if('[list:ext_ConferenceFormat]'=='1')}upcoming{/pboot:if}
-                                      {pboot:if('[list:ext_ConferenceFormat]'=='2')}ongoing{/pboot:if}
-                                      {pboot:if('[list:ext_ConferenceFormat]'=='3')}completed{/pboot:if}">
-                {pboot:if('[list:ext_ConferenceFormat]'=='1')}即将开始{/pboot:if}
-                {pboot:if('[list:ext_ConferenceFormat]'=='2')}进行中{/pboot:if}
-                {pboot:if('[list:ext_ConferenceFormat]'=='3')}已结束{/pboot:if}
-              </span>
-            </td>
-            <td>
-              <div class="flex gap-2">
-                <a href="[list:link]" class="text-primary hover:text-blue-700">
-                  <i class="fa-solid fa-edit"></i>
+      <div class="table-container">
+        <table class="meeting-table">
+          <thead>
+            <tr>
+              <th>状态</th>
+              <th>会议名称</th>
+              <th>日期</th>
+              <th>物料</th>
+              <th>控场</th>
+              <th>主办方</th>
+              <th>专业委员会</th>
+              <th>医院</th>
+              <th>科室</th>
+              <th>会议地点</th>
+              <th>报到时间</th>
+              <th>开幕式时间</th>
+              <th>开始/结束时间</th>
+              <th>会议形式</th>
+              <th>推荐人/业务</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            {pboot:list num=10 order=date}
+            <tr>
+              <td>
+                <script>
+                  const startTime = '[list:ext_time] [list:ext_StartTime]';
+                  const endTime = '[list:ext_time] [list:ext_EndTime]';
+                  const status = getMeetingStatus(startTime, endTime);
+                  document.write(`<span class="status-badge ${status.class}">${status.text}</span>`);
+                </script>
+              </td>
+              <td>[list:title]</td>
+              <td>[list:ext_time style=Y-m-d]</td>
+              <td>[list:ext_materiel]</td>
+              <td>[list:ext_FieldControl]</td>
+              <td>[list:ext_sponsor]</td>
+              <td>[list:ext_ProfessionalCommitt]</td>
+              <td>[list:ext_nosocomium]</td>
+              <td>[list:ext_Administrativeoffice]</td>
+              <td>[list:ext_MeetingPlace]</td>
+              <td>[list:ext_CheckInTime]</td>
+              <td>[list:ext_OpeningCeremonTime]</td>
+              <td>[list:ext_StartTime] - [list:ext_EndTime]</td>
+              <td>[list:ext_ConferenceFormat]</td>
+              <td>[list:ext_Referees]</td>
+              
+              <td>
+                <a href="[list:link]" class="text-primary hover:text-blue-700" title="查看详情">
+                  <i class="fa-solid fa-eye"></i>
                 </a>
-                <button class="text-red-500 hover:text-red-700">
-                  <i class="fa-solid fa-trash"></i>
-                </button>
-              </div>
-            </td>
-          </tr>
-          {/pboot:list}
-        </tbody>
-      </table>
+              </td>
+            </tr>
+            {/pboot:list}
+          </tbody>
+        </table>
+      </div>
 
       <div class="flex justify-between items-center mt-6">
         <div class="text-gray-500">

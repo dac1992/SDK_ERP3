@@ -164,18 +164,12 @@ body {
     {include file='common/head.html'}
 
     <div class="card mb-6">
-      <div class="flex justify-between items-center mb-6">
+      <div class="flex items-center mb-6">
+        <a href="{pboot:sort scode=12}[sort:link]{/pboot:sort}" class="text-primary hover:text-blue-700 mr-4">
+          <i class="fa-solid fa-arrow-left"></i>
+          <span class="ml-1">返回</span>
+        </a>
         <h2 class="text-lg font-bold">会议详情</h2>
-        <div class="flex gap-2">
-          <button class="px-4 py-2 border border-gray-300 rounded hover:bg-gray-50">
-            <i class="fa-solid fa-edit mr-2"></i>
-            编辑
-          </button>
-          <button class="px-4 py-2 bg-primary text-white rounded">
-            <i class="fa-solid fa-check mr-2"></i>
-            确认参会
-          </button>
-        </div>
       </div>
 
       <div class="grid grid-cols-2 gap-6">
